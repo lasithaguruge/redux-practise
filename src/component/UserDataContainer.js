@@ -3,12 +3,16 @@ import { connect } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
 import UserForm from './UserForm';
 import { UserList } from './UserList';
+import { addUser, deleteUser } from '../actions/userActions';
 
 class UserDataContainer extends Component {
 
     handleSubmit = (data) => {
         this.props.addUser(data);
-        console.log("PROPS ", this.props)
+    }
+
+    handleDeleteUser = (name) => {
+        this.props.deleteUser(name);
     }
 
     render() {
@@ -21,7 +25,10 @@ class UserDataContainer extends Component {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <UserList users={this.props.users} />
+                        <UserList 
+                            users={this.props.users} 
+                            handleDeleteUser={this.handleDeleteUser}
+                            handleGetUser={this.handleGetUser} />
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
@@ -32,17 +39,17 @@ class UserDataContainer extends Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         addUser: (data) => {
-            dispatch({
-                type: 'ADD',
-                payload: data
-            });
+            dispatch(addUser(data));
+        },
+        deleteUser: (name) => {
+            dispatch(deleteUser(name))
         }
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        users: state.userReducer
+        users: state
     }
 }
 
